@@ -1,0 +1,87 @@
+# Merchant Potential Scoring Model Configuration
+
+# Data Configuration
+data:
+  input_file: "data/海牙地区中餐厅_评分卡模型.xlsx"
+  output_file: "results/海牙地区中餐厅_评分卡打分结果.xlsx"
+  target_column: "YabandPay客户"
+  
+# Feature Configuration
+features:
+  # Selected features for modeling
+  selected_features:
+    - "营业时长"
+    - "竞争指数"
+    - "人气指数"
+    - "经营年限"
+    - "外卖"
+  
+  # Feature categories
+  numeric_features:
+    - "人气指数"
+    - "平均客单价"
+    - "经营年限"
+    - "营业时长"
+    - "竞争指数"
+    - "商圈等级"
+  
+  binary_features:
+    - "网站"
+    - "社交媒体"
+    - "外卖"
+  
+  categorical_features:
+    - "商圈等级"
+
+# Binning Configuration
+binning:
+  max_bins: 5
+  initial_bins: 20
+  min_bin_percentage: 0.05
+  monotonic_trend: "auto"  # "auto", "ascending", "descending"
+  plot_results: false
+
+# Model Configuration
+model:
+  algorithm: "logistic_regression"
+  max_iterations: 1000
+  solver: "lbfgs"
+  random_state: 42
+
+# Scorecard Configuration
+scorecard:
+  pdo: 50  # Points to double the odds
+  base_score: 600
+  base_odds: 0.05  # 1/20
+  score_range:
+    min: 300
+    max: 900
+  
+  # Segment thresholds
+  segments:
+    A: 700  # High potential
+    B: 650  # Medium-high potential
+    C: 600  # Average potential
+    D: 0    # Low potential
+
+# Evaluation Configuration
+evaluation:
+  plot_roc: true
+  save_plots: true
+  metrics:
+    - "auc"
+    - "ks"
+    - "accuracy"
+
+# Output Configuration
+output:
+  save_model: true
+  save_scorecard_tables: true
+  save_predictions: true
+  export_format: "excel"  # "excel", "csv", "json"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # "DEBUG", "INFO", "WARNING", "ERROR"
+  save_to_file: true
+  log_file: "logs/model_training.log"
